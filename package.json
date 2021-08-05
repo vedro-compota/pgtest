@@ -12,6 +12,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "pg": "^8.7.1",
+    "pg-promise": "^10.11.0",
     "ramda": "^0.27.1"
   },
   "type": "module"

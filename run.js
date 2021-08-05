@@ -10,20 +10,38 @@ const __dirname = dirname(__filename);
 
 dotenv.config({path: __dirname + '/.env'})
 
+const password = process.env.POSTGRES_PASSWORD;
+const username = process.env.POSTGRES_USER;
 const cs = {
-    user: process.env.POSTGRES_USER,
+    user: username,
     host: process.env.POSTGRES_HOST,
     database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    port: process.env.POSTGRES_LOCAL_PORT,
+    password: password,
+    port: process.env.POSTGRES_PORT,
+
   };
 
+console.log('⚐ Username:', username);
+console.log('⚐ Password:', password);
+
 const client = new pg.Client(cs);
+
+client.connection.on('message', function(msg) {
+  console.log('⚐ message:', msg.name)
+ })
+ 
+ client.connection.on('connect', function() {
+  console.log('⚐ connected')
+ })
+ 
+ client.connection.stream.on('connect', function() {
+  console.log('⚐ stream connected')
+ })
+
 client.connect();
 
 client.query('SELECT 1 + 4').then(res => {
 
     const result = R.head(R.values(R.head(res.rows)));
-
-    console.log(result);
+    console.log('⚐ Resulr:', result);
 }).finally(() => client.end());
